@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="unique-text"style="text-align: center;">Traffic Sign Recognition and Prediction</h2>
+
+
+<!-- Main container for the two halves -->
+<div style="display: flex; justify-content: space-between; gap: 20px;">
+
+    <!-- Left Section -->
+    <div style="width: 48%; border-right: 1px solid #ccc; padding-right: 20px;">
+
+        <!-- Image and Upload Section -->
+        <img src="https://static.vecteezy.com/system/resources/thumbnails/009/654/632/small/traffic-signs-and-transportation-simple-concept-flat-illustration-vector.jpg" 
+             alt="Traffic Signs" style="width: 100%; height: auto; margin-bottom: 20px;">
+    
+        <h3 class="unique-text-1" style="text-align: center;">Upload Image and Predict</h3>
+    
+        <form id="upload-file" method="post" enctype="multipart/form-data" style="text-align: center;">
+            <label for="imageUpload" class="upload-label" style="display: inline-block; margin: 0 auto; font-size: 18px;">
+                Choose an Image...
+            </label>
+            <input type="file" name="file" id="imageUpload" accept=".png, .jpg, .jpeg">
+        </form>
+    
+    </div>
+    
+
+    <!-- Right Section -->
+    <div style="width: 48%; padding-left: 20px;">
+
+        <!-- Image Preview Section -->
+        <div class="image-section" style="display:none;">
+            <h3 class="unique-text-1" style="text-align: center;">Image Preview</h3>
+            <div id="imagePreview" 
+                 style="width: 550px; height: 300px; background-size: cover; background-position: center; border: 1px solid #ccc; margin-bottom: 20px auto;">
+            </div>
+        </div>
+
+        <div class="image-section" style="display:none; margin-top: 20px; text-align: center; padding: 12px 30px;">
+            <button type="button" class="btn btn-primary btn-lg" id="btn-predict" style="margin: auto;">Predict!</button>
+        </div>
+        
+
+        <!-- Loader -->
+        <div class="loader" style="display:none; margin-bottom: 20px; justify-content: center; align-items: center;">
+        </div>
+
+        <!-- Result Section -->
+        <h3 class="unique-text-1" id="result" style="text-align: center;">
+            <span></span>
+        </h3>
+
+    </div>
+
+</div>
+
+{% endblock %}
