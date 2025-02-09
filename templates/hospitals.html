@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="unique-text" style="text-align: center;">Find Nearby Hospitals</h2>
+
+<div style="max-width: 1200px; margin: 20px auto; padding: 20px;">
+    <!-- Input Form -->
+    <form method="POST" id="locationForm">
+        <div class="form-group">
+            <label for="latitude">Latitude:</label>
+            <input type="text" class="form-control" id="latitude" name="latitude" required>
+        </div>
+        <div class="form-group">
+            <label for="longitude">Longitude:</label>
+            <input type="text" class="form-control" id="longitude" name="longitude" required>
+        </div>
+        <div class="form-group">
+            <label for="radius">Radius (km):</label>
+            <input 
+                type="number" 
+                class="form-control" 
+                id="radius" 
+                name="radius" 
+                min="1" 
+                max="50" 
+                value="5" 
+                required
+            >
+            <small class="form-text text-muted">Enter radius in kilometers (1-50 km).</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Search Hospitals</button>
+    </form>
+
+    <!-- Error/Results Display -->
+    {% if error %}
+        <div class="alert alert-danger mt-3">{{ error }}</div>
+    {% elif hospitals %}
+        <div class="row mt-4">
+            <!-- Map Column -->
+            <div class="col-md-6">
+                <h4>Map View</h4>
+                <div id="map" style="height: 500px; width: 100%; border: 1px solid #ccc;"></div>
+            </div>
+
+            <!-- List Column -->
+            <div class="col-md-6">
+                <h4>Hospitals within {{ radius_km }} km (sorted nearest to farthest):</h4>
+                <ul class="list-group">
+                    {% for hospital in hospitals %}
+                        <li class="list-group-item hospital-item" 
+                            data-lat="{{ hospital.geometry.location.lat }}" 
+                            data-lng="{{ hospital.geometry.location.lng }}">
+                            <strong>{{ hospital.name }}</strong><br>
+                            Address: {{ hospital.vicinity }}<br>
+                            Distance: {{ "%.2f"|format(hospital.distance) }} km
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Hidden elements to pass data to JavaScript -->
+    {% if hospitals %}
+        <div id="hospitals-data" style="display: none;">
+            {{ hospitals|tojson }}
+        </div>
+        <div id="user-lat" style="display: none;">{{ lat }}</div>
+        <div id="user-lng" style="display: none;">{{ lng }}</div>
+    {% endif %}
+</div>
+
+<!-- Load Google Maps API -->
+<script>
+    function loadGoogleMaps() {
+        const script = document.createElement("script");
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBSjSA1N4b9uipsq6U41ye6bngaTJXtMEE&callback=initMap`;
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+    }
+
+    // Call loadGoogleMaps when the page loads
+    window.onload = loadGoogleMaps;
+</script>
+
+{% endblock %}
